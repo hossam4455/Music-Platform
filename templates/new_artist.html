@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head >
+  <title>Title of the document</title>
+  <style>
+    li{
+      color:red
+    }
+  </style>
+{% load widget_tweaks %}
+{% load static %}
+</head>
+
+<body>
+
+
+{% block content %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{form.as_p}}
+   
+    <button type="submit" class="btn btn-success">Add</button>
+  </form>
+{% endblock %}
+</body>
+
+</html>

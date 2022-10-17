@@ -3,5 +3,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+ 
+    path('create/', views.new_album, name='new_album')
 ]

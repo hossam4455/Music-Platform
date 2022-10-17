@@ -3,7 +3,7 @@ from albums.models import Album
 
 
 #thon man Register your models here.
-class Albummodel(admin.ModelAdmin):
-      readonly_fields=('Creationdatetimee',)
+class AlbumModel(admin.ModelAdmin):
+      readonly_fields=('Creation_datetimee',)
       
-admin.site.register(Album,Albummodel)
+admin.site.register(Album,AlbumModel)

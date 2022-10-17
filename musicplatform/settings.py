@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+from os import path
 from pathlib import Path
 import os.path  
 import sys
@@ -27,9 +27,9 @@ SECRET_KEY = 'django-insecure-^kc%30b0xi!rzdszc+)uxbb-7%d3cjethlyj=t#lu*vorvi#mm
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 import mimetypes
 mimetypes.add_type("text/css", ".css", True)
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
      'albums',
      'artists',
+     
     
 ]
 
@@ -60,7 +62,7 @@ ROOT_URLCONF = 'musicplatform.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,7 +128,9 @@ USE_TZ = True
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
-
+STATIC_DIRS=[
+    os.path.join(BASE_DIR,'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

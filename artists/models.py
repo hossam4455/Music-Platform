@@ -9,13 +9,12 @@ from django.db.models import Q, Count
 
 class Artists (models.Model):
   
-   
-    def Approved_Albums(self):
-     return self.album_set.filter(Approved=True).count()
-     
-    def __str__(self) -> str:
-     return self.Name
-    Name = models.CharField(max_length=200, blank=False,
+
+    Artist_name = models.CharField(max_length=200, blank=False,
                             unique=True, null=False)
-    Link = models.URLField(max_length=200, blank=True, null=False)
+    Artist_link = models.URLField(max_length=200, blank=True, null=False)   
+    def Approved_Albums(self):
+     return self.album_set.filter(Is_approved=True).count()
+    def __str__(self) -> str:
+     return self.Artist_name
    

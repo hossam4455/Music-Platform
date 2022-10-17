@@ -6,22 +6,22 @@ from django.db.models import Count
 from .models import *
 
 
-class albumAdmin(admin.StackedInline):
+class AlbumAdmin(admin.StackedInline):
     model = Album
     extra=1 
     
    
 
 
-class aritstAdmin(admin.ModelAdmin):
-    inlines = [albumAdmin]
-    list_display=['Name','Approved_Albums']
+class AritstAdmin(admin.ModelAdmin):
+    inlines = [AlbumAdmin]
+    list_display=['Artist_name','Approved_Albums']
     def get_name(self, obj):
-        return obj.Artists.Name
+        return obj.Artists.Artist_name
    
    
 
-admin.site.register(Artists, aritstAdmin)
+admin.site.register(Artists, AritstAdmin)
 
 # Register your models here.
 # for artist in Artists.objects.all():
