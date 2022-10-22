@@ -1,14 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Title of the document</title>
-</head>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{%static 'index.css'%}" />
+  
+    <title>Home</title>
+    <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+  />
+  </head>
 <body>
+  {%block body%}
 
- {% for artist in artists %}
- {{artist.Artist_name}}
- {% endfor %}
+  <button type="button" class="btn btn-secondary btn-lg"><a href="{%url 'view_artists'%}">Artists</a></button>
+  <button type="button" class="btn btn-secondary btn-lg"><a href="{%url 'sigin'%}">Sigin</a></button>
+  <button type="button" class="btn btn-secondary btn-lg"><a href="{%url 'signup'%}">signup</a></button>
+ {%endblock%}
+ <script src="{%static 'js/jquery-3.6.1.min.js'%}"></script>
+<script src="{%static 'bootstrap.min.js'%}"></script>
 </body>
 
 </html>

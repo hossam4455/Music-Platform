@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
  
-    path('create/', views.new_album, name='new_album')
+    path('create/', views.new_album.as_view(), name='new_album')
 ]

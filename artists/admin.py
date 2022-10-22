@@ -14,7 +14,7 @@ class AlbumAdmin(admin.StackedInline):
 
 
 class AritstAdmin(admin.ModelAdmin):
-    inlines = [AlbumAdmin]
+   
     list_display=['Artist_name','Approved_Albums']
     def get_name(self, obj):
         return obj.Artists.Artist_name

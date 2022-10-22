@@ -1,7 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Title of the document</title>
+  <style>
+    li{
+      color:red
+    }
+  </style>
+  <title>Creat new albums </title>
+  <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
 </head>
 
 <body>
@@ -10,10 +20,14 @@
 {% block content %}
   <form method="post" novalidate>
     {% csrf_token %}
+   
     {{form_album.as_p}}
     <button type="submit" class="btn btn-success">Add</button>
   </form>
 {% endblock %}
+<script src="{%static 'js/jquery-3.6.1.min.js'%}"></script>
+<script src="{%static 'bootstrap.min.js'%}"></script>
+bootstrap.min.js
 </body>
 
 </html>

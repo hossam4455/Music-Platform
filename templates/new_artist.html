@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head >
@@ -7,8 +8,10 @@
       color:red
     }
   </style>
-{% load widget_tweaks %}
-{% load static %}
+  <link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+/>
 </head>
 
 <body>
@@ -17,7 +20,7 @@
 {% block content %}
   <form method="post" novalidate>
     {% csrf_token %}
-    {{form.as_p}}
+    {{form_class.as_p}}
    
     <button type="submit" class="btn btn-success">Add</button>
   </form>

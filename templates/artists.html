@@ -1,21 +1,43 @@
-{% load static %}
-<html>
+{% load static%}
+<html lang="en">
   <head>
-    <title>view artists</title>
-    <link rel="stylesheet" hrf="{%static 'css/bootstrap.min.css'%}" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{%static 'index.css'%}" />
+  
+    <title>Artists</title>
+    <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+  />
   </head>
-
   <body>
-   {% for artist in my_data_artist %}
-    <div>
-       {{artist.id}}
-       {{artist.Artist_name}}
-       {{artist.Artist_link}}
-       {% for album in artist.album_set.all%}
-       <h4>{{album.album_name}}</h4>
+    {%block body%}
+    <button type="button" class="btn btn-secondary btn-lg"><a href="{%url 'new_artist'%}">New artist</a></button>
+    <button type="button" class="btn btn-secondary btn-lg"><a href="{%url 'new_album'%}">New album</a></button>
+    <button type="button" class="btn btn-secondary btn-lg"><a href="{%url 'logout'%}">Log out</a></button>
+    {% for artist in my_data_artist%} 
+    <ul>
+      <h1>Artist: </h1>
+        <h2><span>id:</span> {{ artist.id }}</h2>
+        <h2><span>name:</span> {{artist.Artist_name}}</h2>
+        <h2><span>link:</span> {{ artist.Artist_link }}</h2>
+        <br>
+        <h1>Albums: </h1>
+        <li>
+            {% for album in artist.album_set.all%}
+             <h2><span>Album id:</span> {{album.id}}</h2>
+              <h2><span>Album name: </span>{{album.Album_name}}</h2>
+              <h2><span>Creation datetimee:</span> {{ album.Creation_datetimee }}</h1>
+              <h2><span>Release datetime:</span>{{ album.Release_datetime }}</h1>
+              <h2><span>Cost:</span> {{ album.Cost }}</h2>
+            {%endfor %}
+        </li>
+      </ul>
 
-      {% endfor %}
-    </div>
-    {% endfor %} 
+    {% endfor %}
+    {%endblock%}
+
   </body>
 </html>
