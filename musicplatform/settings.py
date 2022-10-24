@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'accounts',
     'widget_tweaks',
     'imagekit',
+    'rest_framework',
+    'django_extensions',
     
 ]
 
@@ -133,6 +135,11 @@ STATIC_URL = '/static/'
 STATIC_DIRS=[
     os.path.join(BASE_DIR,'static'),
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ( 
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -12,7 +12,12 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
-
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from .serializers import ArtistSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from artists import serializers
 
 class view_artists(View):
   def get(self, request, *args, **kwargs):
@@ -38,6 +43,19 @@ class MyFormView(View):
           form_class.save()
         return redirect('new_artist')
 
+class artists_list(APIView):
+    
+  def get(self, request, *args, **kwargs): 
+   artist=Artists.objects.all()
+   data=ArtistSerializer(artist,many=True).data
+   return Response(data)
+  def post(self,request):
+        serializer=ArtistSerializer(data=request.data)
+        if serializer.is_valid():
+              serializer.save()
+              return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+           
            
 
  
