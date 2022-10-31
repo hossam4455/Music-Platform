@@ -48,6 +48,11 @@ INSTALLED_APPS = [
     'imagekit',
     'rest_framework',
     'django_extensions',
+  
+    'authentication',
+    'knox',
+    'users',
+    
     
 ]
 
@@ -78,6 +83,24 @@ TEMPLATES = [
         },
     },
 ]
+DEFAULT_SQLITE_ENGINES = (
+    'django.db.backends.sqlite3',
+    'django.db.backends.spatialite',
+)
+DEFAULT_MYSQL_ENGINES = (
+    'django.db.backends.mysql',
+    'django.contrib.gis.db.backends.mysql',
+    'mysql.connector.django',
+)
+DEFAULT_POSTGRESQL_ENGINES = (
+    'django.db.backends.postgresql',
+    'django.db.backends.postgresql_psycopg2',
+    'django.db.backends.postgis',
+    'django.contrib.gis.db.backends.postgis',
+    'psqlextra.backend',
+    'django_zero_downtime_migrations.backends.postgres',
+    'django_zero_downtime_migrations.backends.postgis',
+)
 
 WSGI_APPLICATION = 'musicplatform.wsgi.application'
 
@@ -140,10 +163,35 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
+}
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    
+    
+    
+}
+REST_FRAMEWORK = {
+'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.BasicAuthentication',
+    
+    'rest_framework.authentication.TokenAuthentication',
+)
+
+}
+SWAGGER_SETTINGS = {
+    'LOGIN_URL': 'rest_framework:login',
+    'LOGOUT_URL': 'rest_framework:logout'
+}
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
+AUTH_USER_MODEL='users.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'

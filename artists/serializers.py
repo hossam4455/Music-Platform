@@ -11,4 +11,4 @@ from rest_framework import serializers
 class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
         model=Artists
-        fields='__all__'
+        fields=['Artist_name','Artist_link']

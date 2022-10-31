@@ -17,6 +17,7 @@ from rest_framework.views import APIView
 from .serializers import ArtistSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 from artists import serializers
 
 class view_artists(View):
@@ -43,19 +44,25 @@ class MyFormView(View):
           form_class.save()
         return redirect('new_artist')
 
-class artists_list(APIView):
+#class artists_list(APIView):
     
-  def get(self, request, *args, **kwargs): 
-   artist=Artists.objects.all()
-   data=ArtistSerializer(artist,many=True).data
-   return Response(data)
-  def post(self,request):
-        serializer=ArtistSerializer(data=request.data)
-        if serializer.is_valid():
-              serializer.save()
-              return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+#  def get(self, request, *args, **kwargs): 
+#  artist=Artists.objects.all()
+#   data=ArtistSerializer(artist,many=True).data
+#   return Response(data)
+#  def post(self,request):
+#        serializer=ArtistSerializer(data=request.data)
+#        if serializer.is_valid():
+#              serializer.save()
+#              return Response(serializer.data,status=status.HTTP_201_CREATED)
+#        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+#to generics 
+class ArtistsList(generics.ListCreateAPIView):
+  queryset = Artists.objects.all()
+  serializer_class=ArtistSerializer
+            
            
+            
            
 
  

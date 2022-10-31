@@ -16,6 +16,9 @@ djangorestframework = "^3.14.0"
 Markdown = "^3.4.1"
 django-filter = "^22.1"
 django-extensions = "^3.2.1"
+virtualenv = "^20.16.6"
+django-rest-knox = "^4.2.0"
+PyJWT = "^2.6.0"
 
 
 [build-system]

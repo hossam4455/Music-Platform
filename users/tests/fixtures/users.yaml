@@ -1,0 +1,4 @@
+model: users.User
+pk: 1
+fileds:
+   username: hossam

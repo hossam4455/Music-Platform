@@ -1,0 +1,16 @@
+[
+    {
+        "model":"users.User",
+        "pk":1,
+        "fields":{
+            "username":"Apple",
+            "email":"h@h.com",
+            "password1":"123456",
+            "password2":"123456",
+            "bio":"hhhhhhh"
+
+
+
+        }
+    }
+]
