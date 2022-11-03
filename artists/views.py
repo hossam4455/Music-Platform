@@ -30,7 +30,7 @@ class view_artists(View):
 
 
 
-@method_decorator(login_required, name='dispatch')
+
 class MyFormView(View):
     template_name = 'artists.html'
     def get(self, request, *args, **kwargs):

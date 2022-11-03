@@ -12,7 +12,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     
     path('api/', include('authentication.urls')),
-    path('api-auth/', include('rest_framework.urls')),
+
     path(r'api/auth/', include('knox.urls')),
     path('users/', include('users.urls')),
     

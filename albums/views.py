@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 
     
-@method_decorator(login_required, name='dispatch')
+
 class new_album(View):
 
     def get(self, request, *args, **kwargs):

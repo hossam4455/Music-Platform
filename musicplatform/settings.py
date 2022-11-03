@@ -46,12 +46,14 @@ INSTALLED_APPS = [
     'accounts',
     'widget_tweaks',
     'imagekit',
-    'rest_framework',
+   
     'django_extensions',
   
     'authentication',
     'knox',
     'users',
+    'rest_framework',
+    
     
     
 ]
@@ -175,11 +177,16 @@ REST_FRAMEWORK = {
     
 }
 REST_FRAMEWORK = {
+   
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
+REST_FRAMEWORK = {
 'DEFAULT_AUTHENTICATION_CLASSES': (
     'rest_framework.authentication.SessionAuthentication',
     'rest_framework.authentication.BasicAuthentication',
     
-    'rest_framework.authentication.TokenAuthentication',
+    'rest_framework.authentication.TokenAuthentication', 
+ 
 )
 
 }
@@ -187,12 +194,21 @@ SWAGGER_SETTINGS = {
     'LOGIN_URL': 'rest_framework:login',
     'LOGOUT_URL': 'rest_framework:logout'
 }
-
+REST_FRAMEWORK = {
+    
+    'TEST_REQUEST_RENDERER_CLASSES': [
+        'rest_framework.renderers.MultiPartRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer'
+    ]
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
 AUTH_USER_MODEL='users.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'
 LOGOUT_REDIRECT_URL='home'
+TEST_RUNNER = 'my_project.runner.PytestTestRunner'
