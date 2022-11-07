@@ -13,7 +13,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 class TimeStampedModel(models.Model):
     Creation_datetimee = AutoCreatedField(_('Creation_datetimee'), null=False)
 
@@ -26,7 +26,7 @@ class Album(TimeStampedModel):
         Artists, on_delete=models.CASCADE, null=False)
     Album_name = models.CharField(max_length=200, default="New Album")
     Release_datetime = models.DateField(blank=False)
-    Cost = models.FloatField(blank=True)
+    Cost = models.FloatField(blank=True,validators=[MinValueValidator(0)])
     Is_approved = models.BooleanField(
         default=False, help_text=u" Approve the album if its name is not explicit")
 

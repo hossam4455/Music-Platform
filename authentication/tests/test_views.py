@@ -5,6 +5,7 @@ import pytest
 from rest_framework.test import APIClient
 import users
 
+
 client=APIClient()
 @pytest.mark.django_db
 def test_users_register():
