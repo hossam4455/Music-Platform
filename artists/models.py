@@ -10,8 +10,7 @@ class Artists (models.Model):
 
     Artist_name = models.CharField(max_length=200, blank=False,
                                    unique=True, null=False)
-    user=models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, null=False)
+    user=models.OneToOneField(CustomUser, on_delete = models.CASCADE, related_name = 'artist')
     Artist_link = models.URLField(max_length=200, blank=True, null=False)
 
     def Approved_Albums(self):

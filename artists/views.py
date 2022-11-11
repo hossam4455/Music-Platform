@@ -19,7 +19,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
 from artists import serializers
-
+from rest_framework.permissions import IsAuthenticated
+from django.core.mail import send_mail
 class view_artists(View):
   def get(self, request, *args, **kwargs):
     my_data_artist = Artists.objects.all()
@@ -58,9 +59,11 @@ class MyFormView(View):
 #        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 #to generics 
 class ArtistsList(generics.ListCreateAPIView):
+  
   queryset = Artists.objects.all()
   serializer_class=ArtistSerializer
-            
+  permission_classes = [IsAuthenticated]
+
            
             
            

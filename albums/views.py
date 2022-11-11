@@ -3,7 +3,7 @@ from cgitb import html
 from webbrowser import get
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Album
+from .models import Album,Artists
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
@@ -20,8 +20,14 @@ from django.shortcuts import render
 from rest_framework.pagination import PageNumberPagination
 import django_filters
 from django_filters import rest_framework as filters
-
-
+from rest_framework.permissions import IsAuthenticated
+from django.core.mail import send_mail
+from .tasks import send_email_celery
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 class new_album(View):
 
     def get(self, request, *args, **kwargs):
@@ -53,17 +59,30 @@ class ProductFilter(filters.FilterSet):
         fields = ['min_price', 'max_price', 'name']
 
 
-class AlbumCreat(generics.CreateAPIView):
-    model = Album
+class AlbumCreat(viewsets.ModelViewSet):
+    queryset = Album.objects.filter(Is_approved=True)
     serializer_class = AlbumCreateSeriakizer
-    permission_classes = [IsAdminUser]
-
-
+    
+    @permission_classes([permissions.IsAuthenticated])
+    def create(self, request):
+        
+        if not hasattr(request.user, 'artist'):
+            return Response(status=status.HTTP_403_FORBIDDEN,
+                            data={'message': 'You must be an artist to create an album'})
+        serializer = AlbumCreateSeriakizer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        #serializer=AlbumCreateSeriakizer(artist=self.request.user.artist)
+        serializer.save()
+        send_email_celery(self.request.user.email,self.request.user.username,serializer.data['Album_name'],serializer.data['Cost'])
+     
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
 class AlbumList(generics.ListAPIView):
 
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     pagination_class = LargeAlbumsSetPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ProductFilter
@@ -71,35 +90,31 @@ class AlbumList(generics.ListAPIView):
 
 class AlbumListManule(generics.ListAPIView):
     serializer_class = AlbumSerializer
-
-
     def get_queryset(self):
-       query = Album.objects.filter(Is_approved=True)
-       try:
-        query=query.filter(Album_name__iexact = self.request.GET['Album_name'])
-       except: 
-        pass
-       try:
-         
-         cost = int(self.request.GET['Cost__gte'])
-         query = query.filter(Cost__gte = cost)
-       except KeyError:
-         
-         pass
-       except:
-         
-         raise TypeError("Cost must be integer")
-       try:
-         
-         cost=int(self.request.GET['Cost__lte'])
-         query = query.filter(Cost__lte = cost )
-       except KeyError:
-         
-         pass
-       except:
-         
-         raise TypeError("Cost must be integer")
-       return query
-    
-         
-        
+        query = Album.objects.filter(Is_approved=True)
+        try:
+            query = query.filter(
+                Album_name__iexact=self.request.GET['Album_name'])
+        except:
+            pass
+        try:
+
+            cost = int(self.request.GET['Cost__gte'])
+            query = query.filter(Cost__gte=cost)
+        except KeyError:
+
+            pass
+        except:
+
+            raise TypeError("Cost must be integer")
+        try:
+
+            cost = int(self.request.GET['Cost__lte'])
+            query = query.filter(Cost__lte=cost)
+        except KeyError:
+
+            pass
+        except:
+
+            raise TypeError("Cost must be integer")
+        return query

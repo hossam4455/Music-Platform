@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'users',
     'rest_framework',
     'django_filters',
+    'django_celery_beat',
     
     
     
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'musicplatform.urls'
 
@@ -151,7 +153,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Cairo'
 
 USE_I18N = True
 
@@ -160,6 +162,19 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+
+
+
+EMAIL_PORT=587
+EMAIL_HOST_USER='hossam.hssan47777@gmail.com'
+EMAIL_HOST_PASSWORD='dfvuridewyaqoyos'
+EMAIL_USE_SSL=False
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
@@ -224,3 +239,5 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'
 LOGOUT_REDIRECT_URL='home'
 TEST_RUNNER = 'my_project.runner.PytestTestRunner'
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
