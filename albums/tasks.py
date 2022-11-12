@@ -1,3 +1,4 @@
+from __future__ import absolute_import, unicode_literals
 from time import sleep
 from django.core.mail import send_mail
 from celery import shared_task
@@ -11,7 +12,10 @@ from artists.models import Artists
 from albums.models import Album
 from django.contrib.auth import get_user_model
 import datetime
-@shared_task()
+from dateutil.relativedelta import relativedelta
+from django.conf import settings
+
+@shared_task(bind=True)
 def send_email_celery(email_to,artist_name,album_name,cost):
     """Sends an email when the feedback form has been submitted."""
     sleep(1)  # Simulate expensive operation(s) that freeze Django
@@ -23,22 +27,62 @@ def send_email_celery(email_to,artist_name,album_name,cost):
     fail_silently=False,
     )
     return None;     
-@shared_task(bind=True)
-def send_mail_func(self,request):
-    time_thresold=datetime.now() -datetime.timedelta(hours=2)
-    self.artists.album.object.last(user=request.user)
-    artists = CustomUser.objects.all()
-    #timezone.localtime(users.date_time) + timedelta(days=2)
-    for artist in artists:
-        mail_subject = "Hi! Artis"
-        message = "please create album to get more followers"
-        Album.object.last(user=request.user)
-        to_email = CustomUser.email
-        send_mail(
-            subject = mail_subject,
-            message=message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[to_email],
-            fail_silently=False,
-        )
-    return "Done"
+
+
+
+
+
+
+
+def send_mail_func_2(user):
+    if settings.EMAIL_HOST_USER:
+        host_mail = f'name site <{settings.EMAIL_HOST_USER}>'
+    else:
+        host_mail = f'localServer <Admin@localServer.com>'
+
+    mail_subject = "Hi! Artis"
+    message = "please create album to get more followers"
+    user.email_user(mail_subject, message,  host_mail) 
+
+
+
+
+
+def check_between_two_dates(check_date):
+    current_date = datetime.datetime.now().date()
+
+    add_days = check_date + relativedelta(months=1)
+    if add_days < current_date:
+        return False
+
+    return True
+
+
+
+
+
+@shared_task
+def check_albums(): 
+ 
+    check_all_users = CustomUser.objects.all()
+    if not check_all_users:
+            # return HttpResponse(context, status=status.HTTP_201_CREATED)
+            return
+
+
+    for user in check_all_users:
+
+        if not user.artist.artist_album.all():
+            
+            continue
+
+        last_album = user.artist.artist_album.all()[0]
+        check = check_between_two_dates(last_album.check_date)
+        if not check:
+
+            send_mail_func_2(user)
+            last_album.check_date = datetime.datetime.now().date()
+            last_album.save()
+    # return HttpResponse(context, status=status.HTTP_201_CREATED)
+    return
+

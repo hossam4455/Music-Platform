@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'imagekit',
    
-    'django_extensions',
+    # 'django_extensions',
   
     'authentication',
     'knox',
@@ -88,24 +88,24 @@ TEMPLATES = [
         },
     },
 ]
-DEFAULT_SQLITE_ENGINES = (
-    'django.db.backends.sqlite3',
-    'django.db.backends.spatialite',
-)
-DEFAULT_MYSQL_ENGINES = (
-    'django.db.backends.mysql',
-    'django.contrib.gis.db.backends.mysql',
-    'mysql.connector.django',
-)
-DEFAULT_POSTGRESQL_ENGINES = (
-    'django.db.backends.postgresql',
-    'django.db.backends.postgresql_psycopg2',
-    'django.db.backends.postgis',
-    'django.contrib.gis.db.backends.postgis',
-    'psqlextra.backend',
-    'django_zero_downtime_migrations.backends.postgres',
-    'django_zero_downtime_migrations.backends.postgis',
-)
+# DEFAULT_SQLITE_ENGINES = (
+#     'django.db.backends.sqlite3',
+#     'django.db.backends.spatialite',
+# )
+# DEFAULT_MYSQL_ENGINES = (
+#     'django.db.backends.mysql',
+#     'django.contrib.gis.db.backends.mysql',
+#     'mysql.connector.django',
+# )
+# DEFAULT_POSTGRESQL_ENGINES = (
+#     'django.db.backends.postgresql',
+#     'django.db.backends.postgresql_psycopg2',
+#     'django.db.backends.postgis',
+#     'django.contrib.gis.db.backends.postgis',
+#     'psqlextra.backend',
+#     'django_zero_downtime_migrations.backends.postgres',
+#     'django_zero_downtime_migrations.backends.postgis',
+# )
 
 WSGI_APPLICATION = 'musicplatform.wsgi.application'
 
@@ -165,17 +165,33 @@ USE_TZ = True
 
 
 
+########### remove this 
+# EMAIL_PORT=587
+# EMAIL_HOST_USER='hossam.hssan47777@gmail.com'
+# EMAIL_HOST_PASSWORD='dfvuridewyaqoyos'
+# EMAIL_USE_SSL=False
 
-EMAIL_PORT=587
-EMAIL_HOST_USER='hossam.hssan47777@gmail.com'
-EMAIL_HOST_PASSWORD='dfvuridewyaqoyos'
-EMAIL_USE_SSL=False
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+############################################################################################
+####################### new lines
+# for console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
+#if not DEBUG:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+    # DEFAULT_FROM_EMAIL = "Site Support <ssss@gmail.com>"
 EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = 'hossam.hssan47777@gmail.com'
+EMAIL_HOST_PASSWORD = 'dfvuridewyaqoyos'
+EMAIL_PORT = 587
 
+############################################################################################
+    
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
@@ -239,5 +255,28 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'
 LOGOUT_REDIRECT_URL='home'
 TEST_RUNNER = 'my_project.runner.PytestTestRunner'
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+
+
+#######################################################################
+# CELERY_BROKER_URL = "redis://localhost:6379"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379"
+#########################################################################
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+BROKER_URL = 'redis://localhost:6379'
+# BROKER_URL = 'redis://:123456@127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://:123456@127.0.0.1:6379/1'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kuwait'
+CELERY_BEAT_SCHEDULE = {}
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+# CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+##################################################################
+CELERY_ENABLE_UTC = False
+CELERY_TASK_RESULT_EXPIRES = 10
+# CELERYD_LOG_FILE = BASE_DIR / "/logs/celery/celery.log"
+# CELERYBEAT_LOG_FILE = BASE_DIR / "/logs/celery/beat.log"
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']

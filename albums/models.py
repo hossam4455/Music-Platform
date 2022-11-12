@@ -14,29 +14,42 @@ from imagekit.processors import ResizeToFill
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
+
 class TimeStampedModel(models.Model):
+
     Creation_datetimee = AutoCreatedField(_('Creation_datetimee'), null=False)
+    check_date =  models.DateField(auto_now_add=True, null=False, verbose_name="hidden date") # new
 
     class Meta:
         abstract = True
 
 
 class Album(TimeStampedModel):
-    Artist_name = models.ForeignKey(
-        Artists, on_delete=models.CASCADE, null=False)
+    Artist_name = models.ForeignKey(Artists, on_delete=models.CASCADE, null=False, related_name = 'artist_album') #edit
     Album_name = models.CharField(max_length=200, default="New Album")
-    Release_datetime = models.DateField(blank=False)
-    Cost = models.FloatField(blank=True,validators=[MinValueValidator(0)])
-    Is_approved = models.BooleanField(
-        default=False, help_text=u" Approve the album if its name is not explicit")
+    Release_datetime = models.DateField(null=False)
+    Cost = models.FloatField(blank=True,null=True)
+    Is_approved = models.BooleanField(default=False, help_text=u" Approve the album if its name is not explicit")
+
+
+    class Meta:
+        # verbose_name = _("Album")
+        # verbose_name_plural = _("Albums")
+        ordering = ('-id',)        
 
     def __str__(self):
         return self.Album_name
 
 
+    def clean(self):
+        if self.Cost == None:pass
+        else:
+            if type(self.Cost) == float and self.Cost < 1:
+                raise ValidationError({"Cost": _('Please enter value more than zero'), })
+
+
 class Song(models.Model):
-    album = models.ForeignKey(
-        Album, on_delete=models.CASCADE, null=False)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, null=False, related_name = 'album_song')
     music_name = models.CharField(max_length=200,blank=True)
     image = models.ImageField(upload_to="images/")
     thumb = ProcessedImageField(upload_to="thumbs/",processors=[ResizeToFill(

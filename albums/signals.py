@@ -21,3 +21,4 @@ def song_delete(sender, instance, **kwargs):
         nonlocal flag
         if flag == 0 and kwargs3['instance'].album.song_set.count() < 1:
             instance.save()
+    

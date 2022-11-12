@@ -14,8 +14,15 @@ class AlbumAdmin(admin.StackedInline):
 
 
 class AritstAdmin(admin.ModelAdmin):
-   
-    list_display=['Artist_name','Approved_Albums']
+
+    @admin.display(description='Approved Albums')
+    def get_approved_albums(self, obj):
+        if not obj.artist_album.filter(Is_approved=True):
+            return 0
+
+        return obj.artist_album.filter(Is_approved=True).count()
+
+    list_display=['Artist_name','get_approved_albums']
     def get_name(self, obj):
         return obj.Artists.Artist_name
    

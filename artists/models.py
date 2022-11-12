@@ -13,9 +13,8 @@ class Artists (models.Model):
     user=models.OneToOneField(CustomUser, on_delete = models.CASCADE, related_name = 'artist')
     Artist_link = models.URLField(max_length=200, blank=True, null=False)
 
-    def Approved_Albums(self):
-        return self.album_set.filter(Is_approved=True).count()
-    
+
+
 
     def __str__(self) -> str:
         return self.Artist_name

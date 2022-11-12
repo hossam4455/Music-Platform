@@ -1,3 +1,12 @@
+from django_celery_beat.apps import BeatConfig
+from django_celery_beat.models import (
+    PeriodicTask, PeriodicTasks,
+    IntervalSchedule, CrontabSchedule,
+    SolarSchedule, ClockedSchedule
+)
+
+
+BeatConfig.verbose_name = "ssssssss"
 
 from django.contrib import admin
 from django.urls import include, path
