@@ -22,7 +22,7 @@ import django_filters
 from django_filters import rest_framework as filters
 from rest_framework.permissions import IsAuthenticated
 from django.core.mail import send_mail
-from .tasks import send_email_celery
+from .tasks import send_email_conglations
 from rest_framework import viewsets,views
 from rest_framework.response import Response
 from rest_framework import status
@@ -64,46 +64,23 @@ class AlbumCreat(views.APIView):
     serializer_class = AlbumCreateSeriakizer
     permission_classes = [permissions.IsAuthenticated]
     
-    def get(self, request):
-        
-        serializer= self.serializer_class().data
-
-        return Response(serializer, status=status.HTTP_200_OK)    
-    
+  
     def post(self, request):
-
-        serializer = self.serializer_class(data=request.data,context={"request":request.user})
+        if not hasattr(request.user, 'artists'):
+            return Response(status=status.HTTP_403_FORBIDDEN,
+                            data={'message': 'You must be an artist to create an album'}) 
+        serializer = AlbumCreateSeriakizer(data=request.data)
         if serializer.is_valid():
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    # def create(self, request):
-    #     print("c" * 60)
-    #     print(request.data)
-    #     print(request.user.artist)
-    #     d = request.user.artist
-    #     print()
-    #     print("c" * 60)
+           
+            
         
-    #     if not hasattr(request.user, 'artist'):
-    #         return Response(status=status.HTTP_403_FORBIDDEN,
-    #                         data={'message': 'You must be an artist to create an album'})
-        
-    #     set_data = request.data
-    #     print(type(set_data))
-    #     set_data.update({"Artist_name"})
-    #     set_data["Artist_name"] = request.user.artist
-    #     serializer = AlbumCreateSeriakizer(data=set_data)
-    #     serializer.is_valid(raise_exception=True)
-        
+            serializer.is_valid(raise_exception=True)
+            serializer.save(Artist_name=self.request.user.artists)
+            send_email_conglations(self.request.user.email,self.request.user.username,serializer.data['Album_name'],serializer.data['Cost'])
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    #     serializer.save()
-    #     send_email_celery(self.request.user.email,self.request.user.username,serializer.data['Album_name'],serializer.data['Cost'])
-     
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+
     
 class AlbumList(generics.ListAPIView):
 

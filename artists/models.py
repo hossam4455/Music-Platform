@@ -10,7 +10,7 @@ class Artists (models.Model):
 
     Artist_name = models.CharField(max_length=200, blank=False,
                                    unique=True, null=False)
-    user=models.OneToOneField(CustomUser, on_delete = models.CASCADE, related_name = 'artist')
+    user=models.OneToOneField(CustomUser, on_delete = models.CASCADE, related_name = 'artists')
     Artist_link = models.URLField(max_length=200, blank=True, null=False)
 
 

@@ -15,13 +15,13 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 
-@shared_task(bind=True)
-def send_email_celery(email_to,artist_name,album_name,cost):
-    """Sends an email when the feedback form has been submitted."""
-    sleep(1)  # Simulate expensive operation(s) that freeze Django
+@shared_task
+def send_email_conglations(email_to,artist_name,name,cost):
+   
+    sleep(1)
     send_mail(
     f'conglations artist {artist_name}',
-    f'for new album. {album_name} cost : {cost}',
+    f'for new album.{name}  cost : {cost}',
     'hossam.hssan47777@gmail.com',
     [email_to],
     fail_silently=False,
@@ -34,7 +34,7 @@ def send_email_celery(email_to,artist_name,album_name,cost):
 
 
 
-def send_mail_func_2(user):
+def send_mail_func(user):
     if settings.EMAIL_HOST_USER:
         host_mail = f'name site <{settings.EMAIL_HOST_USER}>'
     else:
@@ -80,7 +80,7 @@ def check_albums():
         check = check_between_two_dates(last_album.check_date)
         if not check:
 
-            send_mail_func_2(user)
+            send_mail_func(user)
             last_album.check_date = datetime.datetime.now().date()
             last_album.save()
     # return HttpResponse(context, status=status.HTTP_201_CREATED)

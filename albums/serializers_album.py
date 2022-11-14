@@ -23,11 +23,11 @@ class AlbumCreateSeriakizer(serializers.ModelSerializer):
         fields=( 'Album_name','Release_datetime','Cost','Is_approved')
             
         
-    def validate(self, data):
-        user = self.context['request']
-        get_username = CustomUser.objects.get(username=user.username)
-        data["Artist_name_id"] = get_username.id
-        self.create(data)
-        return True
+    # def validate(self, data):
+    #     user = self.context['request']
+    #     get_username = CustomUser.objects.get(username=user.username)
+    #     data["Artist_name_id"] = get_username.id
+    #     self.create(data)
+    #     return True
         
     

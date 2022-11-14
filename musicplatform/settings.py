@@ -11,11 +11,31 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from os import path
 from pathlib import Path
-import os.path  
+import os.path  ,environ
 import sys
 from telnetlib import LOGOUT
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+from pathlib import Path
+from celery.schedules import crontab
+import os
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env = environ.Env(
+   
+    DEBUG=(bool, True)
+)
+CELERY_CONF_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_CONF_BEAT_SCHEDULE = {
+    'check_albums': {
+        'task': 'albums.tasks.check_albums',
+        'schedule': crontab(minute=0, hour='*/24')
+    },
+}
+
+
+
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -47,7 +67,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'imagekit',
    
-    # 'django_extensions',
+    'django_extensions',
   
     'authentication',
     'knox',
@@ -88,24 +108,24 @@ TEMPLATES = [
         },
     },
 ]
-# DEFAULT_SQLITE_ENGINES = (
-#     'django.db.backends.sqlite3',
-#     'django.db.backends.spatialite',
-# )
-# DEFAULT_MYSQL_ENGINES = (
-#     'django.db.backends.mysql',
-#     'django.contrib.gis.db.backends.mysql',
-#     'mysql.connector.django',
-# )
-# DEFAULT_POSTGRESQL_ENGINES = (
-#     'django.db.backends.postgresql',
-#     'django.db.backends.postgresql_psycopg2',
-#     'django.db.backends.postgis',
-#     'django.contrib.gis.db.backends.postgis',
-#     'psqlextra.backend',
-#     'django_zero_downtime_migrations.backends.postgres',
-#     'django_zero_downtime_migrations.backends.postgis',
-# )
+DEFAULT_SQLITE_ENGINES = (
+    'django.db.backends.sqlite3',
+    'django.db.backends.spatialite',
+)
+DEFAULT_MYSQL_ENGINES = (
+    'django.db.backends.mysql',
+    'django.contrib.gis.db.backends.mysql',
+    'mysql.connector.django',
+)
+DEFAULT_POSTGRESQL_ENGINES = (
+    'django.db.backends.postgresql',
+    'django.db.backends.postgresql_psycopg2',
+    'django.db.backends.postgis',
+    'django.contrib.gis.db.backends.postgis',
+    'psqlextra.backend',
+    'django_zero_downtime_migrations.backends.postgres',
+    'django_zero_downtime_migrations.backends.postgis',
+)
 
 WSGI_APPLICATION = 'musicplatform.wsgi.application'
 
@@ -152,8 +172,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Africa/Cairo'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -165,33 +185,17 @@ USE_TZ = True
 
 
 
-########### remove this 
-# EMAIL_PORT=587
-# EMAIL_HOST_USER='hossam.hssan47777@gmail.com'
-# EMAIL_HOST_PASSWORD='dfvuridewyaqoyos'
-# EMAIL_USE_SSL=False
+
+EMAIL_PORT=env('EMAIL_PORT')
+EMAIL_HOST_USER=env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=env('EMAIL_HOST_PASSWORD')
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-############################################################################################
-####################### new lines
-# for console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 
-#if not DEBUG:
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    # DEFAULT_FROM_EMAIL = "Site Support <ssss@gmail.com>"
-EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = 'hossam.hssan47777@gmail.com'
-EMAIL_HOST_PASSWORD = 'dfvuridewyaqoyos'
-EMAIL_PORT = 587
-
-############################################################################################
-    
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
@@ -255,28 +259,5 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'
 LOGOUT_REDIRECT_URL='home'
 TEST_RUNNER = 'my_project.runner.PytestTestRunner'
-
-
-
-#######################################################################
-# CELERY_BROKER_URL = "redis://localhost:6379"
-# CELERY_RESULT_BACKEND = "redis://localhost:6379"
-#########################################################################
-# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-BROKER_URL = 'redis://localhost:6379'
-# BROKER_URL = 'redis://:123456@127.0.0.1:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-# CELERY_RESULT_BACKEND = 'redis://:123456@127.0.0.1:6379/1'
-# CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Kuwait'
-CELERY_BEAT_SCHEDULE = {}
-DJANGO_CELERY_BEAT_TZ_AWARE = False
-# CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-##################################################################
-CELERY_ENABLE_UTC = False
-CELERY_TASK_RESULT_EXPIRES = 10
-# CELERYD_LOG_FILE = BASE_DIR / "/logs/celery/celery.log"
-# CELERYBEAT_LOG_FILE = BASE_DIR / "/logs/celery/beat.log"
-CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')

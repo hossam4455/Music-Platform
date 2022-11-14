@@ -27,7 +27,7 @@ class TimeStampedModel(models.Model):
 class Album(TimeStampedModel):
     Artist_name = models.ForeignKey(Artists, on_delete=models.CASCADE, null=False, related_name = 'artist_album') #edit
     Album_name = models.CharField(max_length=200, default="New Album")
-    Release_datetime = models.DateField(null=False)
+    Release_datetime = models.DateField(null=True)
     Cost = models.FloatField(blank=True,null=True)
     Is_approved = models.BooleanField(default=False, help_text=u" Approve the album if its name is not explicit")
 
